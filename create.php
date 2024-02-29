@@ -1,9 +1,8 @@
 <?php
-
 $servername = "localhost";
-$username = "root"; 
-$password = ""; 
-$dbname = "crudapp";
+$username = "id21939663_hamza"; 
+$password = "Hh@#2021"; 
+$dbname = "id21939663_crudapp";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -31,4 +30,4 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 
 $conn->close();
-?>
+

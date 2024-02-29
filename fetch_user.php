@@ -1,5 +1,5 @@
 <?php
-$conn = new mysqli("localhost", "root", "", "crudapp");
+$conn = new mysqli("localhost", "id21939663_hamza", "Hh@#2021", "id21939663_crudapp");
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);

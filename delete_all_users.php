@@ -1,8 +1,8 @@
 <?php
 $host = "localhost"; 
-$db = "crudapp"; 
-$user = "root"; 
-$pass = ""; 
+$db = "id21939663_crudapp"; 
+$user = "id21939663_hamza"; 
+$pass = "Hh@#2021"; 
 
 
 $conn = new mysqli($host, $user, $pass, $db);
