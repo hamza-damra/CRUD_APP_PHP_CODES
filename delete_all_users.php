@@ -1,15 +1,5 @@
 <?php
-$host = "localhost"; 
-$db = "id21939663_crudapp"; 
-$user = "id21939663_hamza"; 
-$pass = "Hh@#2021"; 
-
-
-$conn = new mysqli($host, $user, $pass, $db);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+ include 'config.php';
 
 $checkSql = "SELECT COUNT(*) AS count FROM users";
 $result = $conn->query($checkSql);

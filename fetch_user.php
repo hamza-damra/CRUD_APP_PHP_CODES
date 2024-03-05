@@ -1,26 +1,44 @@
 <?php
-$conn = new mysqli("localhost", "id21939663_hamza", "Hh@#2021", "id21939663_crudapp");
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include 'config.php';
 
-$sql = "SELECT * FROM users";
-$result = $conn->query($sql);
+if (isset($_GET['sortOption'])) {
+    $sortOption = $_GET['sortOption'];
+    $sql = "SELECT * FROM users";
 
-if (!$result) {
-    die("Query failed: " . $conn->error);
-}
+    switch ($sortOption) {
+        case 'asc':
+            $sql .= " ORDER BY name ASC";
+            break;
+        case 'desc':
+            $sql .= " ORDER BY name DESC";
+            break;
+        case 'newest':
+            $sql .= " ORDER BY created_at DESC";
+            break;
+        case 'oldest':
+            $sql .= " ORDER BY created_at ASC";
+            break;
+        default:
+            $sql .= " ORDER BY created_at DESC"; 
+            break; 
+    }
 
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        echo $row["id"] . "," . $row["name"] . "," . $row["email"] . "<br>";
+    $result = $conn->query($sql);
+
+    if ($result) {
+        $rows = array();
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+        echo json_encode($rows);
+    } else {
+        echo "Error executing query: " . $conn->error;
     }
 } else {
-    echo "0 results";
+    echo "Required parameters are missing";
 }
 
-$result->close();
-
 $conn->close();
+
 ?>

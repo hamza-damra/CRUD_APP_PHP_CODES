@@ -1,37 +1,62 @@
 <?php
 
-$servername = "localhost";
-$username = "id21939663_hamza"; 
-$password = "Hh@#2021"; 
-$dbname = "id21939663_crudapp";
+include 'config.php';
 
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-if (isset($_POST['id']) && isset($_POST['name']) && isset($_POST['email'])) {
+if (isset($_POST['id'], $_POST['name'], $_POST['email'], $_POST['birthdate'], $_POST['salary'])) {
     $id = $_POST['id'];
     $name = $_POST['name'];
     $email = $_POST['email'];
+    $birthdate = $_POST['birthdate']; 
+    $salary = $_POST['salary']; 
 
-    $sql = "UPDATE users SET name=?, email=? WHERE id=?";
+    $sql = "UPDATE users SET name=?, email=?, birthdate=?, salary=? WHERE id=?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssi", $name, $email, $id);
 
-    if ($stmt->execute()) {
-        echo "User updated successfully";
+
+    if (!$stmt) {
+        echo "Prepare failed: (" . $conn->errno . ") " . $conn->error;
     } else {
-        echo "Failed to update user";
+        $stmt->bind_param("sssdi", $name, $email, $birthdate, $salary, $id);
+
+        if ($stmt->execute()) {
+            echo "User updated successfully";
+        } else {
+            echo "Failed to update user: " . $stmt->error;
+        }
+
+        $stmt->close();
+    }
+} elseif (isset($_GET['sortOption'])) {
+    $sortOption = $_GET['sortOption'];
+
+    $sql = "SELECT * FROM users";
+
+    switch ($sortOption) {
+        case 'asc':
+            $sql .= " ORDER BY birthdate ASC";
+            break;
+        case 'desc':
+            $sql .= " ORDER BY birthdate DESC";
+            break;
+        default:
+            $sql .= " ORDER BY birthdate ASC";
     }
 
-    $stmt->close();
+    $result = $conn->query($sql);
+
+    if ($result) {
+        $rows = array();
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+        echo json_encode($rows);
+    } else {
+        echo "Error executing query: " . $conn->error;
+    }
 } else {
     echo "Required parameters are missing";
 }
 
 $conn->close();
 
+?>
